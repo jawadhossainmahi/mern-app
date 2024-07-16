@@ -14,7 +14,7 @@ app.use(express.json());
 app.get('/', (req, res) => {
     res.send("Hello World");
 })
-app.use("/api", require("./routes/CreateUser"));
+app.use("/api", require("./routes/User"));
 app.listen(port, () => {
     console.log(`Example app listening on port http://localhost:${port}`);
 })

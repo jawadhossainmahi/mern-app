@@ -5,17 +5,22 @@ const Signup = () => {
     const [credentials, setCredentials] = useState({ name: "", email: "", password: "", location: "" });
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const resposone = await fetch("http://localhost:5000/api/create-user", {
+        const response = await fetch("http://localhost:5000/api/create-user", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(credentials)
-        }).then((res) => {
-            console.log(res)
-        }).catch((error) => {
-            console.log(error)
         })
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        
+        const jsonData = await response.json()
+        console.log(jsonData)
+        // if (!jsonData.success) {
+        //     alert("Enter Valid data");
+        // }
     }
     const onChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value })
