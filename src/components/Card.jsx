@@ -1,29 +1,37 @@
 import React from 'react';
 
-const Card = () => {
+const Card = (props) => {
+    const { title, description, image, id, options } = props;
+
     return (
         <>
-         <div class="card mt-3" style={{width:"18rem",maxHeight:"360px"}}>
-                    <img class="card-img-top" style={{height:"13rem"}} src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixid=M3wzNTUzOTJ8MHwxfHNlYXJjaHwxfHxidXJnZXJ8ZW58MHx8fHwxNzIwNTUzNzM1fDA&ixlib=rb-4.0.3" alt="Title" />
-                    <div class="card-body">
-                        <h4 class="card-title">Title</h4>
-                        <p class="card-text">This is some important text</p>
-                        <div className='container w-100'>
-                            <select className='m-2 h-100  bg-success rounded'>
-                                {Array.from(Array(6),(e,i)=>{
-                                    return(
-                                        <option key={i+1} value={i+1}>{i+1}</option>
+            <div key={id} className="card mt-3" style={{ width: "20rem", maxHeight: "430px" }}>
+                <img className="card-img-top" style={{ height: "13rem" }} src={image} alt={title} />
+                <div className="card-body">
+                    <h4 className="card-title">{title}</h4>
+                    <p className="card-text">{description.substring(0, 50)}</p>
+                    <div className='container w-100'>
+                        <select className='m-2 h-100  bg-success rounded'>
+                            {Array.from(Array(6), (e, i) => {
+                                return (
+                                    <option key={i + 1} value={i + 1}>{i + 1}</option>
+                                )
+                            })}
+                        </select>
+                        <select className='m-2 h-100  bg-success rounded'>
+                            {
+                                (Object.keys(options)).map((data)=>{
+                                    return (
+                                        <option  value={data}>{data}</option>
                                     )
-                                })}
-                            </select>
-                            <select className='m-2 h-100  bg-success rounded'>
-                                <option value={"half"}>Half</option>
-                                <option value={"full"}>Full</option>
-                            </select>
-                            <div className='d-inline h-100 fs-5'>Total Price</div>
-                        </div>
+                                })
+                            }
+
+                        </select>
+                        <div className='d-inline h-100 fs-5'>Total Price</div>
                     </div>
-                </div>   
+                </div>
+            </div >
         </>
     );
 }

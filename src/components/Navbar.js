@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-const Navbar = () => {
+const Navbar = (props) => {
+    const [authToken, setAuthToken] = useState('');
+    const searchText = (e) => {
+        props.search(e.target.value)
+    }
+    const logout = () => {
+        localStorage.removeItem("authToken");
+    }
     return (
         <>
             <nav
@@ -25,12 +32,31 @@ const Navbar = () => {
                                 >Home
                                     <span className="visually-hidden">(current)</span></Link>
                             </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/login">Login</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/signup">Signup</Link>
-                            </li>
+                            {(localStorage.getItem("authToken") ?
+                                <>
+                                    <li className="nav-item">
+                                        <Link className="nav-link active" to="/" aria-current="page"
+                                        >My Order
+                                            <span className="visually-hidden">(current)</span></Link>
+                                    </li>
+                                    <li className='nav-item' onClick={logout}>
+                                        <Link className="nav-link" to="/" aria-current="page"
+                                        >Logout
+                                        </Link>
+
+                                    </li>
+                                </>
+                                :
+                                <>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/login">Login</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/signup">Signup</Link>
+                                    </li>
+                                </>
+                            )}
+
                             <li className="nav-item dropdown">
                                 <Link
                                     className="nav-link dropdown-toggle"
@@ -55,14 +81,14 @@ const Navbar = () => {
                             <input
                                 className="form-control me-sm-2"
                                 type="text"
-                                placeholder="Search"
+                                placeholder="Search" onChange={searchText}
                             />
-                            <button
+                            {/* <button
                                 className="btn btn-outline-success my-2 my-sm-0"
                                 type="submit"
                             >
                                 Search
-                            </button>
+                            </button> */}
                         </form>
                     </div>
                 </div>

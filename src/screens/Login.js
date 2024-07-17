@@ -23,6 +23,7 @@ const Login = () => {
             alert("Enter Valid data");
         }
         if (jsonData.success) {
+            localStorage.setItem("authToken",jsonData.authToken)
             navigate('/')
         }
     }
@@ -35,29 +36,29 @@ const Login = () => {
             <div className='container'>
                 <form onSubmit={handleSubmit}>
 
-                    <div class="mb-3">
-                        <label for="" class="form-label">Email</label>
+                    <div className="mb-3">
+                        <label for="" className="form-label">Email</label>
                         <input
                             type="email"
-                            class="form-control"
+                            className="form-control"
                             name="email"
                             id="email" value={credentials.email} onChange={onChange}
                             aria-describedby="emailHelpId"
                             placeholder="abc@mail.com" />
-                        <small id="emailHelpId" class="form-text text-muted"
+                        <small id="emailHelpId" className="form-text text-muted"
                         >Help text</small>
                     </div>
-                    <div class="mb-3">
-                        <label for="" class="form-label">Password</label>
+                    <div className="mb-3">
+                        <label for="" className="form-label">Password</label>
                         <input
                             type="password"
-                            class="form-control"
+                            className="form-control"
                             name="password"
                             id="password"
                             aria-describedby="helpId"
                             placeholder="" value={credentials.password} onChange={onChange}
                         />
-                        <small id="helpId" class="form-text text-muted">Help text</small>
+                        <small id="helpId" className="form-text text-muted">Help text</small>
                     </div>
 
                     <button className='btn btn-success' type='submit'>Submit</button>

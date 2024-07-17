@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const Users = require("../models/User");
 const { body, validationResult } = require("express-validator");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const jwtSecret = "JawadHossainMahi";
 router.post('/create-user',
     [
         body("name").isLength({ min: 3 }),
@@ -14,17 +17,24 @@ router.post('/create-user',
         if (!error.isEmpty()) {
             return res.status(400).json({ errors: error.array() });
         }
+
         try {
-            const { name, email, password, location } = req.body;
+            const { name, email, location } = req.body;
+            const salt = await bcrypt.genSalt(10);
+            let secPassword = await bcrypt.hash(req.body.password, salt);
             await Users.create(
                 {
-                    name,
-                    email,
-                    password,
-                    location
+                    name: name,
+                    email: email,
+                    password: secPassword,
+                    location: location
                 }
+            ).then(() => {
+                return res.json({ success: true });
+            }).catch((error) => {
+                return res.json({ errors: error });
+            }
             )
-            return res.json({ success: true });
         } catch (error) {
             console.log("Facing error while creating user", error);
             return res.json({ success: false });
@@ -48,10 +58,17 @@ router.post('/login-user',
             if (!userData) {
                 return res.status(400).json({ errors: "No user found" });
             }
-            if (userData.password !== password) {
+            const passwordCompare = await bcrypt.compare(password, userData.password);
+            if (!passwordCompare) {
                 return res.status(400).json({ errors: "Invalid Password" });
             } else {
-                return res.json({ success: true });
+                const data = {
+                    user: {
+                        id: userData.id
+                    }
+                }
+                const authToken = jwt.sign(data, jwtSecret);
+                return res.json({ success: true, userData: userData, authToken: authToken });
             }
         } catch (error) {
             console.log("Facing error while creating user", error);
