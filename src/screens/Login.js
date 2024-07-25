@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import mainContext from '../context/mainContext';
 
 const Login = () => {
+    const { setAuthToken } = useContext(mainContext)
     const [credentials, setCredentials] = useState({ email: "", password: "" });
     const navigate = useNavigate();
     const handleSubmit = async (e) => {
@@ -13,7 +15,7 @@ const Login = () => {
             },
             body: JSON.stringify(credentials)
         })
-        if (!response.status == 200) {
+        if (!response.status === 200) {
             throw new Error('Network response was not ok ' + response.statusText);
         }
 
@@ -23,13 +25,14 @@ const Login = () => {
             alert("Enter Valid data");
         }
         if (jsonData.success) {
-            localStorage.setItem("authToken",jsonData.authToken)
+            localStorage.setItem("authToken", jsonData.authToken)
+            setAuthToken(jsonData.authToken);
             navigate('/')
         }
     }
     const onChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value })
-        console.log(credentials)
+        // console.log(credentials)
     }
     return (
         <>

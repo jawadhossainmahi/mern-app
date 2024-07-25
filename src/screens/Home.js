@@ -1,13 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Card from '../components/Card';
 import Carousel from '../components/Carousel';
+import mainContext from '../context/mainContext';
 
 const Home = () => {
     const [foodCategories, setFoodCategories] = useState([]);
     const [foodItems, setFoodItems] = useState([]);
-    const [search, setSearch] = useState('');
+    const { search, setSearch } = useContext(mainContext);
     const loadData = async () => {
         let response = await fetch("http://localhost:5000/api/foodData", {
             method: "POST",
@@ -29,7 +30,7 @@ const Home = () => {
     console.log(search)
     return (
         <div>
-            <div><Navbar search={setSearch} /></div>
+            <div><Navbar /></div>
             <div>
                 <Carousel />
             </div>
@@ -51,7 +52,7 @@ const Home = () => {
                                                 return (
                                                     <>
                                                         <div key={filter_item._id} className='col-12 col-md-4 '>
-                                                            <Card title={filter_item.name} description={filter_item.description} image={filter_item.img} id={filter_item._id} options={filter_item.options[0]} />
+                                                            <Card foodItem={filter_item} />
                                                         </div>
                                                     </>
                                                 )

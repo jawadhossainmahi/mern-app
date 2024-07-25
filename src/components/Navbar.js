@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
+import mainContext from '../context/mainContext';
 const Navbar = (props) => {
-    const [authToken, setAuthToken] = useState('');
-    const searchText = (e) => {
-        props.search(e.target.value)
-    }
+    const { authToken, setAuthToken } = useContext(mainContext);
+   
     const logout = () => {
         localStorage.removeItem("authToken");
+        setAuthToken('');
     }
     return (
         <>
@@ -32,19 +32,14 @@ const Navbar = (props) => {
                                 >Home
                                     <span className="visually-hidden">(current)</span></Link>
                             </li>
-                            {(localStorage.getItem("authToken") ?
+                            {(authToken !== '' ?
                                 <>
                                     <li className="nav-item">
-                                        <Link className="nav-link active" to="/" aria-current="page"
+                                        <Link className="nav-link active" to="/my-orders" aria-current="page"
                                         >My Order
                                             <span className="visually-hidden">(current)</span></Link>
                                     </li>
-                                    <li className='nav-item' onClick={logout}>
-                                        <Link className="nav-link" to="/" aria-current="page"
-                                        >Logout
-                                        </Link>
 
-                                    </li>
                                 </>
                                 :
                                 <>
@@ -57,39 +52,34 @@ const Navbar = (props) => {
                                 </>
                             )}
 
-                            <li className="nav-item dropdown">
-                                <Link
-                                    className="nav-link dropdown-toggle"
-                                    to="#"
-                                    id="dropdownId"
-                                    data-bs-toggle="dropdown"
-                                    aria-haspopup="true"
-                                    aria-expanded="false"
-                                >Dropdown</Link>
-                                <div
-                                    className="dropdown-menu"
-                                    aria-labelledby="dropdownId"
-                                >
-                                    <Link className="dropdown-item" to="#"
-                                    >Action 1</Link>
-                                    <Link className="dropdown-item" to="#"
-                                    >Action 2</Link>
-                                </div>
-                            </li>
                         </ul>
-                        <form className="d-flex my-2 my-lg-0">
-                            <input
-                                className="form-control me-sm-2"
-                                type="text"
-                                placeholder="Search" onChange={searchText}
-                            />
+                        <div className="d-flex my-2 my-lg-0">
+                            
+                            {authToken !== '' &&
+                                (<>
+                                    <ul className="navbar-nav me-auto mt-2 mt-lg-0">
+
+                                        <li className='nav-item' >
+                                            <Link className="nav-link" to="/cart" aria-current="page"
+                                            >Cart
+                                            </Link>
+
+                                        </li>
+                                        <li className='nav-item' onClick={logout}>
+                                            <Link className="nav-link" to="/" aria-current="page"
+                                            >Logout
+                                            </Link>
+
+                                        </li>
+                                    </ul>
+                                </>)}
                             {/* <button
                                 className="btn btn-outline-success my-2 my-sm-0"
                                 type="submit"
                             >
                                 Search
                             </button> */}
-                        </form>
+                        </div>
                     </div>
                 </div>
             </nav>
