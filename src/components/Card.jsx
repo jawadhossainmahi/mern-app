@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import mainContext from '../context/mainContext';
+import { type } from '@testing-library/user-event/dist/type';
 
 const Card = (props) => {
     const { foodItem } = props;
@@ -10,8 +11,20 @@ const Card = (props) => {
     const { state, dispatch } = useContext(mainContext);
     let finalPrice = qty * parseInt(foodItem.options[0][size]);
     const handleAddToCard = async () => {
-        
-        await dispatch({ type: "ADD", ...foodItem, qty: qty, finalPrice: finalPrice });
+        let food = true;
+        for (const item of state) {
+            if (item._id === foodItem._id) {
+                food = item;
+                console.log("sinde addcart")
+                console.log(food)
+                break;
+            }
+        }
+        if (food !== true) {
+            await dispatch({ type: "UPDATE", ...foodItem, qty: qty, size: size, finalPrice: finalPrice });
+            return;
+        }
+        await dispatch({ type: "ADD", ...foodItem, qty: qty, size: size, finalPrice: finalPrice });
     }
     useEffect(() => {
 

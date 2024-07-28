@@ -1,13 +1,21 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import mainContext from '../context/mainContext';
+import CartModal from '../modals/CartModal';
+import Cart from '../screens/Cart';
 const Navbar = (props) => {
-    const { authToken, setAuthToken } = useContext(mainContext);
-   
+    const { state, search, authToken, setAuthToken } = useContext(mainContext);
+    const [showCartModal, setShowCartModal] = useState(false);
     const logout = () => {
         localStorage.removeItem("authToken");
+        localStorage.removeItem("userEmail");
         setAuthToken('');
     }
+    const loadCart = () => {
+        console.log(search, 'in the navbar')
+        setShowCartModal(true)
+    }
+
     return (
         <>
             <nav
@@ -54,19 +62,29 @@ const Navbar = (props) => {
 
                         </ul>
                         <div className="d-flex my-2 my-lg-0">
-                            
+
+
                             {authToken !== '' &&
                                 (<>
                                     <ul className="navbar-nav me-auto mt-2 mt-lg-0">
 
-                                        <li className='nav-item' >
-                                            <Link className="nav-link" to="/cart" aria-current="page"
+                                        <li className='nav-item me-4' >
+                                            <div className="nav-link btn btn-success" aria-current="page" onClick={loadCart}
                                             >Cart
-                                            </Link>
+                                                {state && state.length !== 0 &&
+                                                    <span
+                                                        class="badge ms-2 p-2  rounded-circle bg-danger"
+                                                    >{state && state.length}</span>
+                                                }
+
+                                            </div>
+                                            {showCartModal ? <><CartModal onClose={() => { setShowCartModal(false) }} > <Cart search={search} /></CartModal></> : null}
+
 
                                         </li>
                                         <li className='nav-item' onClick={logout}>
-                                            <Link className="nav-link" to="/" aria-current="page"
+
+                                            <Link className="nav-link btn btn-danger" to="/" aria-current="page"
                                             >Logout
                                             </Link>
 

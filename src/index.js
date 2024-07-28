@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import AllStates from './global_states/All_States';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.js";
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

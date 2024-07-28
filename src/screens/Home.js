@@ -27,7 +27,7 @@ const Home = () => {
 
         };
     }, []);
-    console.log(search)
+    // console.log(search)
     return (
         <div>
             <div><Navbar /></div>
